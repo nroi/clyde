@@ -1,0 +1,21 @@
+# "wanted_packages" is a file containing one line for each package the user
+# wants to download when updates are available.
+wanted_packages_file: /etc/clyde/wanted_packages
+
+# For each repository, the local directory and the remote URL has to be specified.
+# The local path is used to ascertain which packages already exist locally (and
+# therefore need not be downloaded again). Note, however, that clyde downloads
+# all packages to /dev/null, since cpcache is already in charge of storing the
+# packages to the local file system.
+core:
+    pkg_url: http://alarm.local:7070/core/os/x86_64/
+    local_directory: /var/cache/cpcache/x86/core/os/x86_64
+extra:
+    pkg_url: http://alarm.local:7070/extra/os/x86_64/
+    local_directory: /var/cache/cpcache/x86/extra/os/x86_64
+community:
+    pkg_url: http://alarm.local:7070/community/os/x86_64/
+    local_directory: /var/cache/cpcache/x86/community/os/x86_64
+multilib:
+    pkg_url: http://alarm.local:7070/multilib/os/x86_64/
+    local_directory: /var/cache/cpcache/x86/multilib/os/x86_64
