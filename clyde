@@ -12,7 +12,7 @@ def mirror_status(url, wanted):
         filename = os.path.join(tmp, os.path.basename(url))
         urllib.request.urlretrieve(url, filename)
         tar = tarfile.open(filename, mode='r')
-        for member in tar.members:
+        for member in tar.getmembers():
             pkgname, _ = package_version(member.name)
             if pkgname in wanted:
                 tar.extract(member, tmp)
