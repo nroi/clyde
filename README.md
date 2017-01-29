@@ -10,7 +10,7 @@ After installation, edit `/etc/clyde/config.yml` if necessary (no changes are re
 not been changed). 
 
 Make sure you have some packages listed in `/etc/clyde/wanted_packages`. For instance, if you want clyde to regularly download
-the most recent version version of all packages that you have currently installed, run
+the most recent version of all packages that you have currently installed, run
 ```bash
 pacman -Q | cut -f1 --delimiter=" " > wanted_packages
 ```
