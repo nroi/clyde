@@ -43,9 +43,8 @@ def main():
     for filename in filenames:
         with open(os.path.join("/etc/cpcache/wanted_packages", filename)) as f:
             for packagename in f:
-                wanted.add(packagename)
-    repo_configs = [(k, v) for k, v in config.items() if k != "wanted_packages_file"]
-    for repo, attribs in repo_configs:
+                wanted.add(packagename.rstrip())
+    for repo, attribs in config.items():
         pkg_url = attribs["pkg_url"]
         db_url = os.path.join(pkg_url, repo + ".db")
         print("Check for new files in repository", repo)

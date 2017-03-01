@@ -1,0 +1,10 @@
+#!/bin/sh
+
+CPCACHE_URL="$(sed -ne 's/^Server = \(.*\)\/\$repo.*#\s\+\!cpcache/\1/p' /etc/pacman.d/mirrorlist | head -n1)"
+if [ -z "$CPCACHE_URL" ]; then
+    >&2 echo "Unable to find cpcache mirror in /etc/pacman.d/mirrorlist"
+    >&2 echo "Please ensure that one entry exists with a trailing !cpcache comment."
+    exit 1
+fi
+
+pacman -Qq | curl --data-binary @- "$CPCACHE_URL/$(hostname)" -H 'Content-Type:text/plain; charset=utf8'
