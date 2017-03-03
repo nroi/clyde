@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+THEN=0
 
 CPCACHE_URL="$(sed -ne 's/^Server = \(.*\)\/\$repo.*#\s\+\!cpcache/\1/p' /etc/pacman.d/mirrorlist | head -n1)"
 if [ -z "$CPCACHE_URL" ]; then
@@ -7,4 +9,17 @@ if [ -z "$CPCACHE_URL" ]; then
     exit 1
 fi
 
-pacman -Qq | curl --data-binary @- "$CPCACHE_URL/$(hostname)" -H 'Content-Type:text/plain; charset=utf8'
+while read -r line; do
+    if [ "$line" = "db.lck" ]; then
+        while pgrep -u root pacman > /dev/null; do
+            sleep .1;
+        done
+        NOW="$(date +%s)"
+        DIFF=$((NOW-THEN))
+        if [ $DIFF -ge 1 ]; then
+			pacman -Qq | curl --data-binary @- "$CPCACHE_URL/$(hostname)" -H 'Content-Type:text/plain; charset=utf8'
+            echo "pacman finished."
+        fi
+        THEN="$NOW"
+    fi
+done < <(inotifywait -qm /var/lib/pacman -e DELETE --format %f)
