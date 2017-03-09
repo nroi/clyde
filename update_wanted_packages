@@ -17,7 +17,7 @@ while read -r line; do
         NOW="$(date +%s)"
         DIFF=$((NOW-THEN))
         if [ $DIFF -ge 1 ]; then
-			pacman -Qq | curl --data-binary @- "$CPCACHE_URL/$(hostname)" -H 'Content-Type:text/plain; charset=utf8'
+            pacman -Qq | curl --data-binary @- "$CPCACHE_URL/$(uname -m)/$(hostname)" -H 'Content-Type:text/plain; charset=utf8'
             echo "pacman finished."
         fi
         THEN="$NOW"
