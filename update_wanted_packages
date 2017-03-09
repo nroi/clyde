@@ -9,6 +9,8 @@ if [ -z "$CPCACHE_URL" ]; then
     exit 1
 fi
 
+pacman -Qq | curl --data-binary @- "$CPCACHE_URL/$(uname -m)/$(hostname)" -H 'Content-Type:text/plain; charset=utf8'
+
 while read -r line; do
     if [ "$line" = "db.lck" ]; then
         while pgrep -u root pacman > /dev/null; do
@@ -18,7 +20,6 @@ while read -r line; do
         DIFF=$((NOW-THEN))
         if [ $DIFF -ge 1 ]; then
             pacman -Qq | curl --data-binary @- "$CPCACHE_URL/$(uname -m)/$(hostname)" -H 'Content-Type:text/plain; charset=utf8'
-            echo "pacman finished."
         fi
         THEN="$NOW"
     fi
