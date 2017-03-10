@@ -1,0 +1,8 @@
+[Unit]
+Description=Send POST request when pacman finished
+
+[Service]
+ExecStart=/usr/bin/clyde_update
+
+[Install]
+WantedBy=multi-user.target

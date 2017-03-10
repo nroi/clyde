@@ -3,15 +3,37 @@
 # therefore need not be downloaded again). Note, however, that clyde downloads
 # all packages to /dev/null, since cpcache is already in charge of storing the
 # packages to the local file system.
-core:
-    pkg_url: http://127.0.0.1:7070/core/os/x86_64/
-    local_directory: /var/cache/cpcache/x86/core/os/x86_64
-extra:
-    pkg_url: http://127.0.0.1:7070/extra/os/x86_64/
-    local_directory: /var/cache/cpcache/x86/extra/os/x86_64
-community:
-    pkg_url: http://127.0.0.1:7070/community/os/x86_64/
-    local_directory: /var/cache/cpcache/x86/community/os/x86_64
-multilib:
-    pkg_url: http://127.0.0.1:7070/multilib/os/x86_64/
-    local_directory: /var/cache/cpcache/x86/multilib/os/x86_64
+x86:
+    x86_64:
+        core:
+            pkg_url: http://127.0.0.1:7070/core/os/x86_64/
+            local_directory: /var/cache/cpcache/x86/core/os/x86_64
+        extra:
+            pkg_url: http://127.0.0.1:7070/extra/os/x86_64/
+            local_directory: /var/cache/cpcache/x86/extra/os/x86_64
+        community:
+            pkg_url: http://127.0.0.1:7070/community/os/x86_64/
+            local_directory: /var/cache/cpcache/x86/community/os/x86_64
+        multilib:
+            pkg_url: http://127.0.0.1:7070/multilib/os/x86_64/
+            local_directory: /var/cache/cpcache/x86/multilib/os/x86_64
+
+
+# Uncomment and adapt the following if clyde runs on ArchLinux ARM.
+# arm:
+#     armv7h:
+#         alarm:
+#             pkg_url: http://127.0.0.1:7070/armv7h/alarm
+#             local_directory: /mnt/usb/cpcache/arm/armv7h/alarm
+#         aur:
+#             pkg_url: http://127.0.0.1:7070/armv7h/aur
+#             local_directory: /mnt/usb/cpcache/arm/armv7h/aur
+#         community:
+#             pkg_url: http://127.0.0.1:7070/armv7h/community
+#             local_directory: /mnt/usb/cpcache/arm/armv7h/community
+#         core:
+#             pkg_url: http://127.0.0.1:7070/armv7h/core
+#             local_directory: /mnt/usb/cpcache/arm/armv7h/core
+#         extra:
+#             pkg_url: http://127.0.0.1:7070/armv7h/extra
+#             local_directory: /mnt/usb/cpcache/arm/armv7h/extra
