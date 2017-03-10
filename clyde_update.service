@@ -4,6 +4,8 @@ Description=Send POST request when pacman finished
 [Service]
 ExecStart=/usr/bin/clyde_update
 DynamicUser=true
+# Python may crash upon startup if $HOME is not set.
+Environment=HOME=/tmp
 
 [Install]
 WantedBy=multi-user.target
