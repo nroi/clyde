@@ -42,7 +42,7 @@ def main():
         cache_dir = yaml.safe_load(f)["cache_directory"]
     for dist in config.keys():
         archs = os.listdir(os.path.join(cache_dir, dist, "wanted_packages"))
-        for arch in archs:  # x86_64, i686, armv7l, …
+        for arch in archs:  # x86_64, i686, armv7h, …
             wanted = set()
             path = os.path.join(cache_dir, dist, "wanted_packages", arch)
             for host in os.listdir(path):
