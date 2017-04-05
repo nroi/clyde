@@ -1,9 +1,9 @@
 [Unit]
-Description=clyde
+Description=clyde_server
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/clyde
+ExecStart=/usr/bin/clyde_server
 # Python may crash upon startup if $HOME is not set.
 Environment=HOME=/tmp
 DynamicUser=true

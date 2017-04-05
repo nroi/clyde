@@ -36,7 +36,7 @@ def updates(wanted, locally_stored, url):
             yield filename
 
 def main():
-    with open("/etc/clyde/config.yml") as f:
+    with open("/etc/clyde_server/config.yml") as f:
         config = yaml.safe_load(f)
     with open("/etc/cpcache/cpcache.yaml") as f:
         cache_dir = yaml.safe_load(f)["cache_directory"]
