@@ -1,34 +1,50 @@
 # clyde
 
-clyde is meant to be used in addition to [cpcache](https://github.com/nroi/cpcache), although it should work with
-other pacman caches as well. Its purpose is to keep the cache warm, i.e., to download packages from the cache such that subsequent
+clyde is meant to be used in addition to [cpcache](https://github.com/nroi/cpcache).
+Its purpose is to keep the cache warm, i.e., to download packages from the cache such that subsequent
 HTTP GET requests of the same package can be fulfilled without having to download the file from a remote mirror.
 
 ## Installation
-A package is available in [AUR](https://aur.archlinux.org/packages/clyde-git/).
-After installation, edit `/etc/clyde/config.yml` if necessary (no changes are required if the default settings of cpcache have
-not been changed).
+The project is split into
+[clyde-client](https://aur.archlinux.org/packages/clyde-client-git/)
+and
+[clyde-server](https://aur.archlinux.org/packages/clyde-server-git/).
+clyde-server is meant to be installed on the machine where cpcache is installed, clyde-client
+should be installed on all devices which use cpcache in order to install packages.
 
-Make sure you have some files (with arbitrary file names) listed in the `/etc/clyde/wanted_packages`
-directory.
-Each line in each file inside this directory will be downloaded by clyde, unless the package is
-already cached. The intention behind using multiple files is that you can use one file for each
-client that makes use of cpcache.
-Instead of creating those files manually, you can also send a POST request to cpcache, for instance
-(replace `127.0.0.1:7070` by the actual address of cpcache):
+clyde-client uses HTTP POST requests to send a list of required packages to cpcache. These POST
+requests need to be authorized, so we need to choose a key first. The same key will be used by all
+clients and the server. The key is sent along in an HTTP header, so avoid using illegal characters
+(`openssl rand -hex 25` can be used to generate valid passwords).
+Enter the key in `/etc/clyde_client/key` on each client, for instance:
 ```bash
-pacman -Qq | curl --data-binary @- "http://127.0.0.1:7070/$(hostname)" -H 'Content-Type:text/plain; charset=utf8'
+echo "topsecret" > /etc/clyde_client/key
 ```
-This will send the currently installed packages to cpcache, which will save them in a file named after
-your host.
-
-Once you have done this, start and enable the clyde timer:
-```bash
-systemctl start clyde.timer
-systemctl enable clyde.timer
+Then, enter the same key in `/etc/cpcache/cpcache.yaml` on the server, where cpcache is installed:
+```yaml
+recv_packages:
+    key: "topsecret"
 ```
 
-clyde will now run each night at around 4 o'clock (± one hour) to fetch all packages listed in `/etc/clyde/wanted_packages` if
-a version that is more recent than the one residing on the local filesystem is available.
-Note that clyde itself does not store the packages (all files are downloaded to /dev/null), since cpcache will already store
-all files locally.
+Start and enable `clyde_client.service` on all clients:
+```bash
+systemctl start clyde_client.service
+systemctl enable clyde_client.service
+```
+
+This service will wait for pacman to access its database. As soon as pacman exits after
+having accessed the database, a list containing all currently installed packages is sent to cpcache.
+clyde-client looks for the address of cpcache in `/etc/pacman.d/mirrorlist`,
+so make sure you have a line with a trailing `!cpcache` comment, like this:
+```bash
+Server = http://alarm.local/$repo/os/$arch # !cpcache
+```
+
+On the server, after having installed clyde-server, start and enable `clyde.timer`:
+```bash
+systemctl start clyde_server.timer
+systemctl enable clyde_server.timer
+```
+
+clyde-server will now run each night at around 4 o'clock (± one hour). For each package used by at
+least one client, it will fetch the most recent version, unless already present.
