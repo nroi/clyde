@@ -5,7 +5,7 @@ import tempfile
 import urllib.request
 import re
 import os
-import yaml
+import toml
 
 def mirror_status(url, wanted):
     with tempfile.TemporaryDirectory() as tmp:
@@ -36,29 +36,28 @@ def updates(wanted, locally_stored, url):
             yield filename
 
 def main():
-    with open("/etc/clyde_server/config.yml") as f:
-        config = yaml.safe_load(f)
-    with open("/etc/cpcache/cpcache.yaml") as f:
-        cache_dir = yaml.safe_load(f)["cache_directory"]
+    with open("/etc/clyde_server/config.toml") as f:
+        config = toml.load(f)
+    with open("/etc/cpcache/cpcache.toml") as f:
+        cache_dir = toml.load(f)["cache_directory"]
     for dist in config.keys():
-        archs = os.listdir(os.path.join(cache_dir, dist, "wanted_packages"))
-        for arch in archs:  # x86_64, i686, armv7h, …
-            wanted = set()
-            path = os.path.join(cache_dir, dist, "wanted_packages", arch)
-            for host in os.listdir(path):
-                with open(os.path.join(cache_dir, dist, "wanted_packages", arch, host)) as f:
-                    for package_name in f:
-                        wanted.add(package_name.rstrip())
-            for repo, attribs in config[dist][arch].items():
-                pkg_url = attribs["pkg_url"]
-                db_url = os.path.join(pkg_url, repo + ".db")
-                print("Check for new files in repository", repo)
-                locally_stored = os.listdir(attribs["local_directory"])
-                for filename in updates(wanted, locally_stored, db_url):
-                    print("Downloading {}…".format(filename))
-                    pkgurl = os.path.join(pkg_url, filename)
-                    urllib.request.urlretrieve(pkgurl, os.devnull)
-                    print("Download completed.")
+        arch = "x86_64"
+        wanted = set()
+        path = os.path.join(cache_dir, "wanted_packages")
+        for host in os.listdir(path):
+            with open(os.path.join(cache_dir, "wanted_packages", host)) as f:
+                for package_name in f:
+                    wanted.add(package_name.rstrip())
+        for repo, attribs in config.items():
+            pkg_url = attribs["pkg_url"]
+            db_url = os.path.join(pkg_url, repo + ".db")
+            print("Check for new files in repository", repo)
+            locally_stored = os.listdir(attribs["local_directory"])
+            for filename in updates(wanted, locally_stored, db_url):
+                print("Downloading {}…".format(filename))
+                pkgurl = os.path.join(pkg_url, filename)
+                urllib.request.urlretrieve(pkgurl, os.devnull)
+                print("Download completed.")
 
 if __name__ == "__main__":
     main()
