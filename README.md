@@ -20,10 +20,10 @@ Enter the key in `/etc/clyde_client/key` on each client, for instance:
 ```bash
 echo "topsecret" > /etc/clyde_client/key
 ```
-Then, enter the same key in `/etc/cpcache/cpcache.yaml` on the server, where cpcache is installed:
-```yaml
-recv_packages:
-    key: "topsecret"
+Then, enter the same key in `/etc/cpcache/cpcache.toml` on the server, where cpcache is installed:
+```toml
+[recv_packages]
+    key = "topsecret"
 ```
 
 Start and enable `clyde_client.service` on all clients:
