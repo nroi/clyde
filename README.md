@@ -32,7 +32,10 @@ Remember to restart cpcache after having changed its configuration:
 systemctl restart cpcache
 ```
 
-Then, install  [clyde-server](https://aur.archlinux.org/packages/clyde-server-git/) so that you can start and enable the timer:
+Then, install  [clyde-server](https://aur.archlinux.org/packages/clyde-server-git/).
+clyde-server uses `/etc/clyde_server/config.toml` as its configuration file. If you're using the default settings of cpcache,
+you can leave this file as it is. If you have changed `cache_directory` setting of cpcache, you will have to replace all occurrences of `/var/cache/cpcache` by your chosen cache directory. When clyde-server has been installed and you have verified
+that the config file is correct, you can start and enable the timer:
 ```bash
 systemctl start clyde_server.timer
 systemctl enable clyde_server.timer
