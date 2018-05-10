@@ -66,10 +66,6 @@ use cpcache as pacman cache):
    To make sure that cpcache successfully receives this message, check the journal of cpcache (e.g. `systemctl status cpcache`).
    It should log a message such as `Successfully written file /var/cache/cpcache/wanted_packages/arch-vm for host arch-vm`.
 
-Now, we have a list of all packages required by your clients stored on the server. This list will be continuously
-updated as your clients add new packages and remove existing ones.
-
-
-
-clyde-server will now run each night at around 4 o'clock (± one hour). For each package used by at
-least one client, it will fetch the most recent version, unless already present.
+Now, the server knows which packages are required by inspecting the files inside the directory
+`/var/cache/cpcache/wanted_packages`. clyde-server will run each night at around 4 o'clock (± one hour).
+For each package used by at least one client, it will fetch the most recent version, unless already present.
