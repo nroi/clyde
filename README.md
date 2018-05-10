@@ -27,12 +27,12 @@ by the comments in this section of the file, you'll have to uncomment the two li
     key = "34f449e4050605ccd1720071cafd00489e448c95b25c963f69"
 ```
 
-Remember to restart the cpcache after having changed its configuration:
+Remember to restart cpcache after having changed its configuration:
 ```bash
 systemctl restart cpcache
 ```
 
-Then, install  [clyde-server](https://aur.archlinux.org/packages/clyde-server-git/) so that you can start and the timer:
+Then, install  [clyde-server](https://aur.archlinux.org/packages/clyde-server-git/) so that you can start and enable the timer:
 ```bash
 systemctl start clyde_server.timer
 systemctl enable clyde_server.timer
@@ -41,15 +41,15 @@ systemctl enable clyde_server.timer
 ### Client Configuration
 
 Note that we use `cpcache.local` as the hostname for cpache. Replace it by whatever IP address or hostname can be used to reach
-cpcache inside your own LAN. Repeat the following for steps on all machines that are used as clients (i.e., all machines that
+cpcache inside your own LAN. Repeat the following steps on all machines that are used as clients (i.e., all machines that
 use cpcache as pacman cache):
 
 1. Adapt your `/etc/pacman.d/mirrorlist` so that clyde-client know how to reach cpcache. clyde-client looks for
-a line with a trailing `!cpcache` comment. If cpcache runs on the same machine as the client, you would add
-the following line at the beginning of your mirrorlist file:
-```bash
-Server = http://cpcache.local:7070/$repo/os/$arch # !cpcache
-```
+   a line with a trailing `!cpcache` comment. If cpcache runs on the same machine as the client, you would add
+   the following line at the beginning of your mirrorlist file:
+   ```bash
+   Server = http://cpcache.local:7070/$repo/os/$arch # !cpcache
+   ```
 2. Create the directory `/etc/clyde_client` and add the key to a file named `key` inside this directory:
    ```bash
    mkdir /etc/clyde_client
