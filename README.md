@@ -17,7 +17,7 @@ and
 clyde-server is meant to be installed on the machine where cpcache is installed, clyde-client
 should be installed on all devices which use cpcache in order to install packages.
 
-The line with the trailing `!cpcache` comment is used so that clyde-client knows how to reach cpcache. After clyde-client has been installed, a pacman hook is run whenever a new package has been installed or removed. This hook will run `/usr/bin/clyde_client`, which will send POST request to cpcache.
+The line with the trailing `!cpcache` comment is used so that clyde-client knows how to reach cpcache. After clyde-client has been installed, a pacman hook is run whenever a new package has been installed or removed. This hook will run `/usr/bin/clyde_client`, which will send a POST request to cpcache.
 These POST requests need to be authorized, so we need to choose a key first. The same key will be used by all
 clients and the server. The key is sent along in an HTTP header, so avoid using illegal characters
 (`openssl rand -hex 25` can be used to generate valid passwords).
@@ -32,6 +32,12 @@ Then, enter the same key in `/etc/cpcache/cpcache.toml` on the server, where cpc
     key = "topsecret"
 ```
 
+Remember to restart the server after having changed the key:
+```bash
+systemctl restart cpcache
+```
+
+You can check if clyde-client successfully authorizes its POST requests by running `/usr/bin/clyde_client` and inspecting the systemd journal. You should then see a message such as `Successfully written file /var/cache/cpcache/wanted_packages/myhost for host myhost`.
 
 On the server, after having installed clyde-server, start and enable `clyde.timer`:
 ```bash
