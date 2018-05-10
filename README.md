@@ -9,9 +9,7 @@ HTTP GET requests of the same package can be fulfilled without having to downloa
 
 ### Server Configuration
 Before continuing, please make sure that cpcache is running. Check the output of `systemctl status cpcache` to
-verify that cpcache is listening on its standard port `7070` for incoming requests. Also note that we use
-`cpcache.local` as the hostname for cpache. Replace it by whatever IP address or hostname can be used to reach
-cpcache inside your own LAN.
+verify that cpcache is listening on its standard port `7070` for incoming requests. 
 
 First, we need to create a key which will be used to authorize HTTP POST requests sent by clyde-client to cpcache.
 This key is shared between all clients and servers, so it has to be generated only once.
@@ -42,8 +40,9 @@ systemctl enable clyde_server.timer
 
 ### Client Configuration
 
-Next, repeat the following for steps on all machines that are used as clients (i.e., all machines that use cpcache
-as pacman cache):
+Note that we use `cpcache.local` as the hostname for cpache. Replace it by whatever IP address or hostname can be used to reach
+cpcache inside your own LAN. Repeat the following for steps on all machines that are used as clients (i.e., all machines that
+use cpcache as pacman cache):
 
 1. Adapt your `/etc/pacman.d/mirrorlist` so that clyde-client know how to reach cpcache. clyde-client looks for
 a line with a trailing `!cpcache` comment. If cpcache runs on the same machine as the client, you would add
