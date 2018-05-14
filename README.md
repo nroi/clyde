@@ -13,7 +13,7 @@ verify that cpcache is listening on its standard port `7070` for incoming reques
 
 First, we need to create a key which will be used to authorize HTTP POST requests sent by clyde-client to cpcache.
 This key is shared between all clients and servers, so it has to be generated only once.
-The key should not contain any chars that are not suited to be sent in an HTTP request. You can use openssl to
+The key should not contain any characters that are not suited to be sent in an HTTP request. You can use openssl to
 generate a suitable key for you:
 ```
 $ openssl rand -hex 25
