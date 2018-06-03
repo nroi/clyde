@@ -48,10 +48,12 @@ cpcache inside your own LAN. Repeat the following steps on all machines that are
 use cpcache as pacman cache):
 
 1. Adapt your `/etc/pacman.d/mirrorlist` so that clyde-client know how to reach cpcache. clyde-client looks for
-   a line with a trailing `!cpcache` comment. If cpcache runs on the same machine as the client, you would add
-   the following line at the beginning of your mirrorlist file:
+   the line `# cpcache` and assumes that the following line is the address of the server running cpcache.
+   For instance, with `cpcache.local` being the hostname of the machine running cpcache, you would add the
+   following line to your mirrorlist file:
    ```bash
-   Server = http://cpcache.local:7070/$repo/os/$arch # !cpcache
+   # cpcache
+   Server = http://cpcache.local:7070/$repo/os/$arch
    ```
 2. Create the directory `/etc/clyde_client` and add the key to a file named `key` inside this directory:
    ```bash
